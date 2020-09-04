@@ -102,7 +102,7 @@ def go():
         if resp.cgx_status:
             element_list = resp.cgx_content.get("items", None)    
 
-            csvwriter.writerow( [ "ION-Name", "ION-Interface", "Rule-Status", "Rule-Prefix", "Rule-App", "Rule-Action"])
+            csvwriter.writerow( [ "ION-Name", "ION-Interface", "Rule-Name", "Rule-Status", "Rule-Prefix", "Rule-App", "Rule-Action"])
             for element in element_list:       
                 result = cgx_session.get.element_extensions(element['site_id'], element['id'])
                 if result.cgx_status:
@@ -111,7 +111,7 @@ def go():
                         if ( "namespace" in extension.keys() and extension['namespace'] == "devicemanagement/interface"):
                             rule_device = name_to_id[element['id']]
                             rule_interface = name_to_id[extension['entity_id']]
-
+                            rule_name = extension['name']
                             if (extension['disabled'] == False):
                                 rule_status = "Enabled"
                             else:
@@ -122,7 +122,7 @@ def go():
                                 rule_app = rule['app']
                                 rule_action = rule['action']
                                 counter += 1
-                                csvwriter.writerow( [ rule_device, rule_interface, rule_status, rule_prefix, rule_app, rule_action
+                                csvwriter.writerow( [ rule_device, rule_interface, rule_name, rule_status, rule_prefix, rule_app, rule_action
                                     ] ) 
         else:
             logout()
